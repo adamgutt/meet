@@ -1,42 +1,46 @@
 import React, { Component } from 'react';
+import { ErrorAlert } from './Alert';
 
 class NumberOfEvents extends Component {
-
   state = {
-    numberOfEvents: 32
+    numberOfEvents: 32,
+    infoText: '',
   };
 
   handleInputChanged = (event) => {
-    let actValue = parseInt(event.target.value)
-    if (actValue > 0 && actValue <= 32) {
-      this.setState({ numberOfEvents: actValue });
-    } else if (actValue > 32) {
-      this.setState({ numberOfEvents: 32 });
-      actValue = 32;
+    let inputValue = event.target.value;
+    if (inputValue >= 33 || inputValue <= 0) {
+      this.setState({
+        numberOfEvents: inputValue,
+        infoText: 'Please enter a number between 1 - 32.',
+      });
     } else {
-      this.setState({ numberOfEvents: NaN });
-      actValue = NaN;
+      this.setState({
+        numberOfEvents: event.target.value,
+        infoText: ' ',
+      });
     }
-    this.props.updateEvents(undefined, actValue);
+
+    this.props.updateEvents(undefined, inputValue);
   };
 
   render() {
     return (
-      <div className="numberOfEvents">
-        <label htmlFor="number-of-events">Show max: </label>
-
+      <div className="events-num">
+        <label className="events-num-label">Number of Events: </label>
+        <br />
         <input
           type="number"
-          className="number-of-events"
-          min="1"
-          max="32"
+          id="events-num-input"
           value={this.state.numberOfEvents}
           onChange={this.handleInputChanged}
-
         />
+        <div>
+          <ErrorAlert text={this.state.infoText} />
+        </div>
       </div>
     );
   }
 }
 
-export default NumberOfEvents; 
+export default NumberOfEvents;
