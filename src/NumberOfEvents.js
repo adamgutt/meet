@@ -2,43 +2,54 @@ import React, { Component } from 'react';
 import { ErrorAlert } from './Alert';
 
 class NumberOfEvents extends Component {
+
   state = {
-    numberOfEvents: 32,
-    infoText: '',
+    numberOfEvents: 32
   };
 
   handleInputChanged = (event) => {
-    let inputValue = event.target.value;
-    if (inputValue >= 33 || inputValue <= 0) {
+    let actValue = parseInt(event.target.value)
+    if (actValue > 0 && actValue <= 32) {
       this.setState({
-        numberOfEvents: inputValue,
-        infoText: 'Please enter a number between 1 - 32.',
+        numberOfEvents: actValue,
+        errorText: ' '
       });
+    } else if (actValue > 32 || actValue < 1) {
+      this.setState({
+        numberOfEvents: 32,
+        errorText: 'Please choose a number between 1 and 32.'
+      });
+      actValue = 32;
     } else {
       this.setState({
-        numberOfEvents: event.target.value,
-        infoText: ' ',
+        numberOfEvents: undefined,
+        errorText: ' '
       });
+      actValue = 1;
     }
-
-    this.props.updateEvents(undefined, inputValue);
+    this.props.updateEvents(undefined, actValue);
   };
 
   render() {
     return (
-      <div className="events-num">
-        <label className="events-num-label">Number of Events: </label>
-        <br />
-        <input
-          type="number"
-          id="events-num-input"
-          value={this.state.numberOfEvents}
-          onChange={this.handleInputChanged}
-        />
-        <div>
-          <ErrorAlert text={this.state.infoText} />
+      <div>
+        <div className="numberOfEvents">
+          <label htmlFor="number-of-events">Show max: </label>
+          <input
+            type="number"
+            className="number-of-events"
+            min="1"
+            max="32"
+            value={this.state.numberOfEvents}
+            onChange={this.handleInputChanged}
+          />
         </div>
+        <div className="errorAlert">
+          <ErrorAlert text={this.state.errorText} />
+        </div>
+
       </div>
+
     );
   }
 }

@@ -2,50 +2,27 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import NumberOfEvents from '../NumberOfEvents';
 
-
 describe('<NumberOfEvents /> component', () => {
-
   let NumberOfEventsWrapper;
   beforeAll(() => {
     NumberOfEventsWrapper = shallow(<NumberOfEvents updateEvents={() => { }} />);
   });
-
-  /* -------------------------------------------------------------------
-          FEATURE 3: SPECIFY NUMBER OF EVENTS
-  ---------------------------------------------------------------------*/
-
-  /* ----------------- SCENARIO 1 --------------------------------------: 
-  When user hasn’t specified a number, 32 is the default number
-  ---------------------------------------------------------------------*/
-  test('display 32 by default', () => {
-    expect(
-      NumberOfEventsWrapper.find('.number-of-events').get(0).props.value
-    ).toEqual(32);
+  test('render events-num div', () => {
+    expect(NumberOfEventsWrapper.find('.events-num')).toHaveLength(1);
   });
-
-  test('display 32 if user input is not in range 1-32', () => {
-    NumberOfEventsWrapper.find('.number-of-events').simulate(
-      'change', { target: { value: 40 } }
-    );
-    expect(NumberOfEventsWrapper.state('numberOfEvents')).toEqual(32);
+  test('render events number label', () => {
+    expect(NumberOfEventsWrapper.find('.events-num-label')).toHaveLength(1);
   });
-
-  /* ----------------- SCENARIO 2 --------------------------------------: 
-  User can change the number of events they want to see
-  ---------------------------------------------------------------------*/
-  test('user change number of events', () => {
-    NumberOfEventsWrapper.find('.number-of-events').simulate(
-      'change', { target: { value: 5 } }
-    );
-    expect(NumberOfEventsWrapper.state('numberOfEvents')).toEqual(5);
+  test('render events number input', () => {
+    expect(NumberOfEventsWrapper.find('#events-num-input')).toHaveLength(1);
   });
-
-
-  test('change numberOfEvents state when number input changes', () => {
-    NumberOfEventsWrapper.setState({ numberOfEvents: 10 });
-    NumberOfEventsWrapper.find('.number-of-events').simulate('change', { target: { value: 4 } });
-    expect(NumberOfEventsWrapper.state('numberOfEvents')).not.toEqual(undefined);
-    expect(NumberOfEventsWrapper.state('numberOfEvents')).toEqual(4);
+  test('render 32 events by default', () => {
+    expect(NumberOfEventsWrapper.find('#events-num-input').prop('value')).toBe(32);
   });
-
-});  
+  test('render number of events according to user input', () => {
+    NumberOfEventsWrapper.find('#events-num-input').simulate('change', {
+      target: { value: 18 },
+    });
+    expect(NumberOfEventsWrapper.find('#events-num-input').prop('value')).toBe(18);
+  });
+});
